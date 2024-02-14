@@ -139,7 +139,6 @@ public class DungeonGenerator {
             	if (rooms.get(i).intersects(finalBossRoom)) {
                     for (int roomX = rooms.get(i).x; roomX < rooms.get(i).x + rooms.get(i).width; roomX++) {
                         for (int roomY = rooms.get(i).y; roomY < rooms.get(i).y + rooms.get(i).height; roomY++) {
-
                             	matrix[roomY][roomX] = ' ';
                             
                         }
@@ -168,14 +167,14 @@ public class DungeonGenerator {
 
 
         generateCorridors();
-        
-        for (Room room : rooms) {
-            for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
-                for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
-                    	matrix[y][x] = '.';
-                }
-            }
-        }
+//        
+//        for (Room room : rooms) {
+//            for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
+//                for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
+//                    	matrix[y][x] = '.';
+//                }
+//            }
+//        }
         
     }
     
@@ -226,10 +225,10 @@ public class DungeonGenerator {
 
     private void drawLShapedCorridor(Point start, Point end) {
         // Draw horizontal corridor first
-    		drawHorizontalCorridor(start.x, end.x, start.y);
+    		drawHorizontalCorridor(start.x, end.x, start.y, end.y);
 
             // Draw vertical corridor
-            drawVerticalCorridor(end.y, start.y, end.x);
+            drawVerticalCorridor(start.x, end.x, start.y, end.y);
 
         
         
@@ -237,38 +236,100 @@ public class DungeonGenerator {
 
     }
 
-    private void drawHorizontalCorridor(int startX, int endX, int y) {
-        int minY = Math.max(0, Math.min(y, DUNGEONMAP_HEIGHT - 1));
-        int maxY = Math.max(0, Math.min(y, DUNGEONMAP_HEIGHT - 1));
-        int minX = Math.max(0, Math.min(startX, endX));
+
+    
+    
+    private void drawHorizontalCorridor(int startX, int endX, int startY, int endY) {
+        int minY = Math.max(1, Math.min(startY, DUNGEONMAP_HEIGHT - 1));
+        int maxY = Math.max(1, Math.min(endY, DUNGEONMAP_HEIGHT - 1));
+        int minX = Math.max(1, Math.min(startX, endX));
         int maxX = Math.min(DUNGEONMAP_WIDTH - 1, Math.max(startX, endX));
+        
+        int verticalMinX = Math.max(1, Math.min(endX, DUNGEONMAP_WIDTH - 1));
+        int verticalMinY = Math.max(1, Math.min(startY, endY));
+        int verticalMaxY = Math.min(DUNGEONMAP_HEIGHT - 1, Math.max(startY, endY));
+        
+        int minYCount = 0;
+        int minXCount = 0;
+
+        
+        for (int x = minX; x <= maxX; x++) {
+            if (minY >= 0 && minY < DUNGEONMAP_HEIGHT && (matrix[minY][x] == '-' || matrix[minY][x] == '|')) {
+            	minYCount++;      	
+            }
+        }
+        
+        for (int y = verticalMinY; y <= verticalMaxY; y++) {
+
+        	if (verticalMinX >= 0 && verticalMinX < DUNGEONMAP_HEIGHT && (matrix[y][verticalMinX] == '|' || matrix[y][verticalMinX] == '-')) {
+        		minXCount++;    
+        		System.out.println("(" + verticalMinX + "," + y + ")");
+        	}
+        }
+
+        if (minYCount >= 3) {
+        	minY--;
+        }
+        System.out.println("");
+        if (minXCount >= 3) {
+        	maxX--;
+        	System.out.println("MinX True");
+        }
+
 
         for (int x = minX; x <= maxX; x++) {
             if (minY >= 0 && minY < DUNGEONMAP_HEIGHT) {
-                	matrix[minY][x] = '#';
+            		matrix[minY][x] = '#';      	
             }
-            if (maxY >= 0 && maxY < DUNGEONMAP_HEIGHT && minY != maxY) {
-                matrix[maxY][x] = '#';
-            }
+
         }
     }
 
-    private void drawVerticalCorridor(int startY, int endY, int x) {
-        int minX = Math.max(0, Math.min(x, DUNGEONMAP_WIDTH - 1));
-        int maxX = Math.max(0, Math.min(x, DUNGEONMAP_WIDTH - 1));
-        int minY = Math.max(0, Math.min(startY, endY));
+    private void drawVerticalCorridor(int startX, int endX, int startY, int endY) {
+        int minX = Math.max(1, Math.min(startX, DUNGEONMAP_WIDTH - 1));
+        int maxX = Math.max(1, Math.min(endX, DUNGEONMAP_WIDTH - 1));
+        int minY = Math.max(1, Math.min(startY, endY));
         int maxY = Math.min(DUNGEONMAP_HEIGHT - 1, Math.max(startY, endY));
+        
+        
+        int horizontalMinY = Math.max(1, Math.min(endY, DUNGEONMAP_HEIGHT - 1));
+        int horizontalMinX = Math.max(1, Math.min(startX, endX));
+        int horizontalMaxX = Math.min(DUNGEONMAP_WIDTH - 1, Math.max(startX, endX));
+        
+        int minXCount = 0;
+        int minYCount = 0;
+
+        for (int y = minY; y <= maxY; y++) {
+        	if (minX >= 0 && minX < DUNGEONMAP_HEIGHT && (matrix[y][minX] == '|' || matrix[y][minX] == '-')) {
+        		minXCount++;      	
+        }
+            for (int x = horizontalMinX; x <= horizontalMaxX; x++) {
+                if (horizontalMinY >= 0 && horizontalMinY < DUNGEONMAP_HEIGHT && (matrix[horizontalMinY][x] == '-' || matrix[horizontalMinY][x] == '|')) {
+                	minYCount++; 
+                	System.out.println("(" + x + "," + horizontalMinY + ")");
+                }
+            }
+
+
+    }
+    if (minXCount >= 3) {
+    	minX--;
+    	
+    }
+    System.out.println("");
+    if (minYCount >= 3) {
+    	maxY--;
+    	System.out.println("minY True");
+    }
 
         for (int y = minY; y <= maxY; y++) {
             if (minX >= 0 && minX < DUNGEONMAP_WIDTH) {
-                	matrix[y][minX] = '#';
 
-            }
-            if (maxX >= 0 && maxX < DUNGEONMAP_WIDTH && minX != maxX) {
-                	matrix[y][maxX] = '#'; 
+                		matrix[y][minX] = '#';
             }
         }
     }
+
 
    
     private boolean roomIntersects(Room newRoom) {
