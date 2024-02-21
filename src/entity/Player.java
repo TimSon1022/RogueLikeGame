@@ -322,16 +322,16 @@ public class Player extends Entity{
 			int attackMoveY = 0;
 			int attackMoveX = 0;
 			if (direction.equals("down")) {
-				attackMoveY = 42;
+				attackMoveY = 28;
 			}
 			else if (direction.equals("left")) {
-				attackMoveX = -33;
+				attackMoveX = -22;
 			}
 			else if (direction.equals("right")) {
-				attackMoveX = 33;
+				attackMoveX = 22;
 			}
 			else if (direction.equals("up")) {
-				attackMoveY = -42;
+				attackMoveY = -28;
 			}
 			g2.drawImage(weaponImage, screenX+attackMoveX, screenY+attackMoveY, gp.tileSize, gp.tileSize, null);
 		}

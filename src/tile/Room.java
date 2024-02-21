@@ -11,6 +11,23 @@ class Room {
         this.width = width;
         this.height = height;
     }
+    
+
+    public int[] getTopLeftCorner() {
+        return new int[]{x, y};
+    }
+
+    public int[] getTopRightCorner() {
+        return new int[]{x + width - 1, y};
+    }
+
+    public int[] getBottomLeftCorner() {
+        return new int[]{x, y + height - 1};
+    }
+
+    public int[] getBottomRightCorner() {
+        return new int[]{x + width - 1, y + height - 1};
+    }
 
     public boolean intersects(Room other) {
 
