@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -29,14 +30,16 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int worldHeight = tileSize * maxWorldRow;
 	
 	//FPS
-	int FPS = 100;
+	public int FPS = 100;
 	public KeyHandler keyH = new KeyHandler();
 	public Player player = new Player(this, keyH);
-	public TileManager tileM = new TileManager(this);
+	DungeonGenerator dungeon = new DungeonGenerator();
+	public TileManager tileM = new TileManager(this, dungeon);
 	public CollisionChecker cChecker = new CollisionChecker(this);
+	public AssetSetter aSetter = new AssetSetter(this, dungeon);
 	Thread gameThread;
+	public SuperObject obj[] = new SuperObject[150];
 	
-
 
 	
 	//Set player's default position
@@ -52,12 +55,13 @@ public class GamePanel extends JPanel implements Runnable{
 		
 	}
 	
+	public void setupGame() {
+		aSetter.setObject();
+	}
+	
 	public void startGameThread() {
 		player.worldX = tileM.playerX;
 		player.worldY = tileM.playerY;
-
-		System.out.println("Start");
-
 		gameThread = new Thread(this);
 		gameThread.start();
 		
@@ -79,7 +83,8 @@ public class GamePanel extends JPanel implements Runnable{
 
 			
 			if (delta >= 1) {				
-				update();		
+				update();	
+
 				repaint();
 				delta --;
 			}
@@ -93,14 +98,36 @@ public class GamePanel extends JPanel implements Runnable{
 	public void update() {
 		
 		player.update();
+		for (int i = 0; i < obj.length; i++) {
+			if (obj[i] != null) {
+				obj[i].update();
+				obj[i].spriteNum++;
+			}
+		}
+
 		
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
+		
+		//tile
 		tileM.draw(g2);
 		
+		//object
+		for (int i = 0; i < obj.length; i++) {
+			if (obj[i] != null) {
+				try {
+					obj[i].draw(g2, this);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//player
 		player.draw(g2);
 		
 		g2.dispose();

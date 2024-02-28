@@ -23,6 +23,8 @@ public class Entity {
 	boolean attack;
 	boolean attackBuffer;
 	public Rectangle hitBox;
+	public int hitBoxDefaultX, hitBoxDefaultY;
+	
 	public boolean collisionOn = false;
 
 }

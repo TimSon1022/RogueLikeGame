@@ -18,6 +18,12 @@ public class Player extends Entity{
 	KeyHandler keyH;
 	public final int screenX;
 	public final int screenY;
+	int attackBoostTotal = 0;
+	int defenseBoostTotal = 0;
+	int goldTotal = 0;
+	int healthBoostTotal = 0;
+	int healthPotionTotal = 0;
+	int keyTotal = 0;
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
@@ -27,6 +33,8 @@ public class Player extends Entity{
 		hitBox = new Rectangle();
 		hitBox.x = 4;
 		hitBox.y = 4;
+		hitBoxDefaultX = hitBox.x;
+		hitBoxDefaultY = hitBox.y;
 		hitBox.width = 24;
 		hitBox.height = 24;
 		
@@ -117,6 +125,8 @@ public class Player extends Entity{
 		collisionOn = false;
 		gp.cChecker.checkTile(this);
 		
+		int objIndex = gp.cChecker.checkObject(this, true);
+		pickUpObject(objIndex);
 		if (!collisionOn) {
 
 				switch(direction) {
@@ -194,6 +204,64 @@ public class Player extends Entity{
 		
 		
 	}
+	
+	
+	public void pickUpObject(int i) {
+		if (i != 999) {
+			
+			String objectName = gp.obj[i].name;
+			switch(objectName) {
+			case "attack_boost":
+				
+				attackBoostTotal++;
+				gp.obj[i] = null;
+				System.out.println("Attack Boosts: " + attackBoostTotal);
+				break;
+			case "chest":
+				if (keyTotal > 0) {
+					gp.obj[i] = null;
+					keyTotal--;
+				}
+				System.out.println("Keys: " + keyTotal);
+				break;
+			case "defense_boost":
+				
+				defenseBoostTotal++;
+				gp.obj[i] = null;
+
+				break;
+			case "gold":
+				
+				goldTotal++;
+				gp.obj[i] = null;
+				break;
+			case "health_boost":
+				
+				healthBoostTotal++;
+				gp.obj[i] = null;
+				break;
+			case "health_potion":
+				
+				healthPotionTotal++;
+				gp.obj[i] = null;
+				System.out.println("Health Potions: " + healthPotionTotal);
+				break;
+			case "key":
+				keyTotal++;
+				gp.obj[i] = null;
+				System.out.println("Keys: " + keyTotal);
+				break;
+			}
+			
+			
+			
+		}
+	}
+	
+	
+	
+	
+	
 	
 	public void draw(Graphics2D g2) {
 
@@ -341,5 +409,9 @@ public class Player extends Entity{
 		
 		
 	}
+	
+	
+	
+	
 
 }

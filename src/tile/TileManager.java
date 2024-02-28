@@ -11,6 +11,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import entity.Player;
+import main.DungeonGenerator;
 import main.GamePanel;
 
 public class TileManager {
@@ -23,40 +24,15 @@ public class TileManager {
     Tile[] tile;
 
 
-    public TileManager(GamePanel gp) {
+    public TileManager(GamePanel gp, DungeonGenerator dungeon) {
         this.gp = gp;
         tile = new Tile[10];
-        getTileImage();
-        
-		DungeonGenerator dungeon = new DungeonGenerator();
-
 		dungeonTiles = dungeon.matrix;
 		dungeonMap = new Tile[dungeonTiles.length][dungeonTiles[0].length];
 		generateDungeons();
     }
     
-    public void getTileImage() {
-    	
-    	try {
-    		tile[0] = new Tile();
-    		tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/dungeon_tiles.png"));
-    		
-    		tile[1] = new Tile();
-    		tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water_tiles.png"));
-
-    		tile[2] = new Tile();
-    		tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall_tiles.png"));
-
-    	}
-    	catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    	
-    }
-
     
-    
-
     public void generateDungeons() {
     	try {
             for (int i = 0; i < dungeonTiles.length; i++) {
@@ -78,7 +54,7 @@ public class TileManager {
                     	dungeonMap[i][j].collision = true;
                     }  
                     else {
-                    	dungeonMap[i][j].image = ImageIO.read(getClass().getResourceAsStream("/tiles/boundary_tiles.png"));
+//                    	dungeonMap[i][j].image = ImageIO.read(getClass().getResourceAsStream("/tiles/boundary_tiles.png"));
                     	dungeonMap[i][j].collision = true;
                     }
                 }
