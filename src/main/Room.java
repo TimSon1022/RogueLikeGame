@@ -2,8 +2,9 @@ package main;
 
 
 
-class Room {
-    int x, y, width, height;
+public class Room {
+    public int x, y, width, height;
+    boolean enter = false;
 
     public Room(int x, int y, int width, int height) {
         this.x = x;

@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -76,9 +75,10 @@ public class DungeonGenerator {
 
     private static final int MAX_ROOMS = 100;
     private static final int MIN_ROOM_SIZE = 10;
-    private static final int MAX_ROOM_SIZE = 20;
+    private static final int MAX_ROOM_SIZE = 25;
     private static final int DUNGEONMAP_WIDTH = 150;
     private static final int DUNGEONMAP_HEIGHT = 150;
+    public int playerRoomIndex = 0;
 
     private List<Room> rooms;
 	private List<int[]> corners = new ArrayList<>();
@@ -137,7 +137,7 @@ public class DungeonGenerator {
    
         }
         
-    	Room finalBossRoom = new Room(130,130,20,20);
+    	Room finalBossRoom = new Room(120,120,30,30);
 
             for (int i = 0; i < rooms.size(); i++) {
             	if (rooms.get(i).intersects(finalBossRoom)) {
@@ -416,7 +416,7 @@ public class DungeonGenerator {
     }
     
     public void placePlayer() {
-        Room nearestRoom = findNearestRoom(0, 0);
+        Room nearestRoom = findNearestRoom(0, 0, true);
 
         if (nearestRoom != null) {
             int playerX = nearestRoom.x + nearestRoom.width / 2;
@@ -425,10 +425,10 @@ public class DungeonGenerator {
         }
     }
 
-    private Room findNearestRoom(int targetX, int targetY) {
+    private Room findNearestRoom(int targetX, int targetY , boolean isPlayer) {
         Room nearestRoom = null;
         double minDistance = Double.MAX_VALUE;
-
+        int i = 0;
         for (Room room : rooms) {
             double distance = Math.sqrt(Math.pow(targetX - (room.x + room.width / 2), 2)
                     + Math.pow(targetY - (room.y + room.height / 2), 2));
@@ -436,14 +436,19 @@ public class DungeonGenerator {
             if (distance < minDistance) {
                 minDistance = distance;
                 nearestRoom = room;
+                if (isPlayer) {
+                	playerRoomIndex = i;
+                }
+                
             }
+            i++;
         }
 
         return nearestRoom;
     }
     
     public void placeFinalBoss() {
-        Room nearestRoom = findNearestRoom(DUNGEONMAP_WIDTH - 1, DUNGEONMAP_HEIGHT - 1);
+        Room nearestRoom = findNearestRoom(DUNGEONMAP_WIDTH - 1, DUNGEONMAP_HEIGHT - 1, false);
 
         if (nearestRoom != null) {
             int bossX = nearestRoom.x + nearestRoom.width / 2;
@@ -455,6 +460,18 @@ public class DungeonGenerator {
     public List<Room> getRooms() {
     	
     	return rooms;
+    }
+    
+    public int getRoomIndexAt(int x, int y) {
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            if (x >= room.x && x < room.x + room.width - 1 && y >= room.y && y < room.y + room.height - 1) {
+            	
+                return i; // Found the room at the specified coordinates
+            }
+        }
+
+        return -1; // No room found at the specified coordinates
     }
     
 
@@ -471,6 +488,8 @@ public class DungeonGenerator {
             System.out.println();
         }
     }
+    
+    
     
     
 

@@ -4,13 +4,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class ObjectAttackBoost extends SuperObject{
+import main.GamePanel;
 
+public class ObjectAttackBoost extends SuperObject{
+	GamePanel gp;
 	
-	public ObjectAttackBoost() {
+	public ObjectAttackBoost(GamePanel gp) {
+		this.gp = gp;
 		name = "attack_boost";
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/objects/attack_boost.png"));
+			uTool.scaleImage(image, gp.tileSize, gp.tileSize);
 		}
 		
 		catch (IOException e) {

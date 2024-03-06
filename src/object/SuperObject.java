@@ -8,6 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
+import main.Room;
+import main.UtilityTool;
 
 public class SuperObject {
 	
@@ -19,26 +21,30 @@ public class SuperObject {
 	public Rectangle hitBox = new Rectangle(0,0,32,32);
 	public int hitBoxDefaultX = 0;
 	public int hitBoxDefaultY = 0;
+	public boolean opened = true;
+	UtilityTool uTool = new UtilityTool();
 	
 	public void draw(Graphics2D g2, GamePanel gp) throws InterruptedException {
-		
-		
-		int screenX = worldX - gp.player.worldX + gp.player.screenX;
-		int screenY = worldY - gp.player.worldY + gp.player.screenY;
-		
-		if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
-				worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
-				worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
-				worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-			
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+		int index = gp.dungeon.getRoomIndexAt(gp.player.worldX/gp.tileSize, gp.player.worldY/gp.tileSize);
+	    int screenX = worldX - gp.player.worldX + gp.player.screenX;
+	    int screenY = worldY - gp.player.worldY + gp.player.screenY;
+	    
+	    if (index != -1 && isWithinBounds(worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX, gp.player.screenY, gp.dungeon.getRooms().get(index), gp)) {
+	        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
-			if (name.equals("gold") && spriteNum  > 41) {
-				spriteNum = 1;
-			}
-		}
-		
-		
+	        if (name.equals("gold") && spriteNum > 41) {
+	            spriteNum = 1;
+	        }
+	    }
+	}
+
+	// Helper method
+	private boolean isWithinBounds(int worldX, int worldY, int playerWorldX, int playerWorldY, int playerScreenX, int playerScreenY, Room room, GamePanel gp) {
+	    return worldX + gp.tileSize > playerWorldX - playerScreenX &&
+	           worldX - gp.tileSize < playerWorldX + playerScreenX &&
+	           worldY + gp.tileSize > playerWorldY - playerScreenY &&
+	           worldY - gp.tileSize < playerWorldY + playerScreenY &&
+               (room == null || (worldX/gp.tileSize >= room.x && worldX/gp.tileSize < room.x + room.width && worldY/gp.tileSize >= room.y && worldY/gp.tileSize < room.y + room.height));
 	}
 
 	public void update() {

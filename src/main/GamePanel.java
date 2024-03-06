@@ -26,23 +26,33 @@ public class GamePanel extends JPanel implements Runnable{
 	//World Settings
 	public final int maxWorldCol = 150;
 	public final int maxWorldRow = 150;
-	public final int worldWidth = tileSize * maxWorldCol;
-	public final int worldHeight = tileSize * maxWorldRow;
 	
 	//FPS
 	public int FPS = 100;
-	public KeyHandler keyH = new KeyHandler();
-	public Player player = new Player(this, keyH);
-	DungeonGenerator dungeon = new DungeonGenerator();
-	public TileManager tileM = new TileManager(this, dungeon);
+	public DungeonGenerator dungeon = new DungeonGenerator();
+	
+	
+	//System
+	public TileManager tileM = new TileManager(this);
+	public KeyHandler keyH = new KeyHandler(this);
+	public Sound soundEffect = new Sound();
+	public Sound music = new Sound();
 	public CollisionChecker cChecker = new CollisionChecker(this);
 	public AssetSetter aSetter = new AssetSetter(this, dungeon);
+	public UI ui = new UI(this);
 	Thread gameThread;
+	
+	// Entities and objects
+	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[150];
 	
 
 	
-	//Set player's default position
+	//Game State
+	public int gameState;
+	public final int pauseState = 0;
+	public final int playState = 1;
+	
 	
 	public GamePanel() {
 
@@ -57,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void setupGame() {
 		aSetter.setObject();
+		gameState = playState;
 	}
 	
 	public void startGameThread() {
@@ -97,13 +108,20 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		
-		player.update();
-		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] != null) {
-				obj[i].update();
-				obj[i].spriteNum++;
+		if (gameState == playState) {
+			player.update();
+			for (int i = 0; i < obj.length; i++) {
+				if (obj[i] != null) {
+					obj[i].update();
+					obj[i].spriteNum++;
+				}
 			}
 		}
+		if (gameState == pauseState) {
+			
+		}
+		
+
 
 		
 	}
@@ -129,9 +147,17 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		//player
 		player.draw(g2);
+		ui.draw(g2);
 		
 		g2.dispose();
 	}
+	
+	public void playSE (int i) {
+		soundEffect.setFile(i);
+		soundEffect.play();
+	}
+	
+	
 	
 	
 	

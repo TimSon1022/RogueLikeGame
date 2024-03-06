@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 
 public class Player extends Entity{
@@ -18,12 +19,20 @@ public class Player extends Entity{
 	KeyHandler keyH;
 	public final int screenX;
 	public final int screenY;
-	int attackBoostTotal = 0;
-	int defenseBoostTotal = 0;
-	int goldTotal = 0;
-	int healthBoostTotal = 0;
-	int healthPotionTotal = 0;
-	int keyTotal = 0;
+	
+	double healthCounter = 0;
+	public int goldTotal = 0;
+
+	public int healthPotionTotal = 0;
+	public int keyTotal = 0;
+	public int fullHealth = 5;
+	public int combatHealth = 5;
+	public double xp = 0;
+	public int attackStat = 5;
+	public int defenseStat = 5;
+
+
+	
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
@@ -51,77 +60,104 @@ public class Player extends Entity{
 	
 	public void getPlayerImage() {
 		characterName = "Link";
+		 if (characterName.equals("Link")) {
+		        up1 = setup("link_up_1");
+		        up2 = setup("link_up_2");
+		        down1 = setup("link_down_1");
+		        down2 = setup("link_down_2");
+		        left1 = setup("link_left_1");
+		        left2 = setup("link_left_2");
+		        right1 = setup("link_right_1");
+		        right2 = setup("link_right_2");
+		        downAttack = setup("link_attack_down");
+		        downSwordAttack1 = setup("link_sword_attack_down_1");
+		        downSwordAttack2 = setup("link_sword_attack_down_2");
+		        downSwordAttack3 = setup("link_sword_attack_down_3");
+		        leftAttack = setup("link_attack_left");
+		        leftSwordAttack1 = setup("link_sword_attack_left_1");
+		        leftSwordAttack2 = setup("link_sword_attack_left_2");
+		        leftSwordAttack3 = setup("link_sword_attack_left_3");
+		        rightAttack = setup("link_attack_right");
+		        rightSwordAttack1 = setup("link_sword_attack_right_1");
+		        rightSwordAttack2 = setup("link_sword_attack_right_2");
+		        rightSwordAttack3 = setup("link_sword_attack_right_3");
+		        upAttack = setup("link_attack_up");
+		        upSwordAttack1 = setup("link_sword_attack_up_1");
+		        upSwordAttack2 = setup("link_sword_attack_up_2");
+		        upSwordAttack3 = setup("link_sword_attack_up_3");
+		    } 
+		 else if (characterName.equals("Mario")) {
+		        up1 = setup("mario_up_1");
+		        up2 = setup("mario_up_2");
+		        down1 = setup("mario_down_1");
+		        down2 = setup("mario_down_2");
+		        left1 = setup("mario_left_1");
+		        left2 = setup("mario_left_2");
+		        right1 = setup("mario_right_1");
+		        right2 = setup("mario_right_2");
+		    } 
+		 else if (characterName.equals("Pokemon Trainer")) {
+		        up1 = setup("pkmn_trainer_up_1");
+		        up2 = setup("pkmn_trainer_up_2");
+		        down1 = setup("pkmn_trainer_down_1");
+		        down2 = setup("pkmn_trainer_down_2");
+		        left1 = setup("pkmn_trainer_left_1");
+		        left2 = setup("pkmn_trainer_left_2");
+		        right1 = setup("pkmn_trainer_right_1");
+		        right2 = setup("pkmn_trainer_right_2");
+		    }
+		
+	}
+	
+	public BufferedImage setup(String imageName) {
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage image = null;
+		
 		try {
-			
-			if (characterName.equals("Link")) {
-				up1 = ImageIO.read(getClass().getResourceAsStream("/player/link_up_1.png"));
-				up2 = ImageIO.read(getClass().getResourceAsStream("/player/link_up_2.png"));
-				down1 = ImageIO.read(getClass().getResourceAsStream("/player/link_down_1.png"));
-				down2 = ImageIO.read(getClass().getResourceAsStream("/player/link_down_2.png"));
-				left1 = ImageIO.read(getClass().getResourceAsStream("/player/link_left_1.png"));
-				left2 = ImageIO.read(getClass().getResourceAsStream("/player/link_left_2.png"));
-				right1 = ImageIO.read(getClass().getResourceAsStream("/player/link_right_1.png"));
-				right2 = ImageIO.read(getClass().getResourceAsStream("/player/link_right_2.png"));
-				downAttack  = ImageIO.read(getClass().getResourceAsStream("/player/link_attack_down.png"));
-				downSwordAttack1  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_down_1.png"));
-				downSwordAttack2  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_down_2.png"));
-				downSwordAttack3  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_down_3.png"));
-				leftAttack  = ImageIO.read(getClass().getResourceAsStream("/player/link_attack_left.png"));
-				leftSwordAttack1  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_left_1.png"));
-				leftSwordAttack2  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_left_2.png"));
-				leftSwordAttack3  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_left_3.png"));
-				rightAttack  = ImageIO.read(getClass().getResourceAsStream("/player/link_attack_right.png"));
-				rightSwordAttack1  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_right_1.png"));
-				rightSwordAttack2  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_right_2.png"));
-				rightSwordAttack3  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_right_3.png"));
-				upAttack  = ImageIO.read(getClass().getResourceAsStream("/player/link_attack_up.png"));
-				upSwordAttack1  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_up_1.png"));
-				upSwordAttack2  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_up_2.png"));
-				upSwordAttack3  = ImageIO.read(getClass().getResourceAsStream("/player/link_sword_attack_up_3.png"));
-			}
-			else if (characterName.equals("Mario")) {
-				up1 = ImageIO.read(getClass().getResourceAsStream("/player/mario_up_1.png"));
-				up2 = ImageIO.read(getClass().getResourceAsStream("/player/mario_up_2.png"));
-				down1 = ImageIO.read(getClass().getResourceAsStream("/player/mario_down_1.png"));
-				down2 = ImageIO.read(getClass().getResourceAsStream("/player/mario_down_2.png"));
-				left1 = ImageIO.read(getClass().getResourceAsStream("/player/mario_left_1.png"));
-				left2 = ImageIO.read(getClass().getResourceAsStream("/player/mario_left_2.png"));
-				right1 = ImageIO.read(getClass().getResourceAsStream("/player/mario_right_1.png"));
-				right2 = ImageIO.read(getClass().getResourceAsStream("/player/mario_right_2.png"));
-			}
-			else if (characterName.equals("Pokemon Trainer")) {
-				up1 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_up_1.png"));
-				up2 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_up_2.png"));
-				down1 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_down_1.png"));
-				down2 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_down_2.png"));
-				left1 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_left_1.png"));
-				left2 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_left_2.png"));
-				right1 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_right_1.png"));
-				right2 = ImageIO.read(getClass().getResourceAsStream("/player/pkmn_trainer_right_2.png"));
-			}
-
+			image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
+			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
 		
+		return image;
+		
 	}
 	
 	public void update() {
+		if (combatHealth < fullHealth) {
+			healthCounter+= (double)1/100;
+			if (healthCounter >= 10) {
+				healthCounter = 0;
+				combatHealth++;
+			}
+		}
+
+
+		
+
+		
 		if (keyH.upPressed == true && !attackBuffer) {
-			direction = "up";	
+			direction = "up";
+
+			
 		}
 		else if (keyH.downPressed == true&& !attackBuffer) {
 			direction = "down";
 
+
 		}
 		else if (keyH.leftPressed  == true&& !attackBuffer){
 			direction = "left";
+
 		}
 		else if (keyH.rightPressed == true&& !attackBuffer) {
 			direction = "right";
 
 		}
+		
+		
 		collisionOn = false;
 		gp.cChecker.checkTile(this);
 		
@@ -132,7 +168,9 @@ public class Player extends Entity{
 				switch(direction) {
 				case "up":	
 				if (keyH.upPressed == true&& !attackBuffer) {
-					worldY -= speed;	
+					worldY -= speed;
+
+					
 				}
 					
 					break;
@@ -143,13 +181,13 @@ public class Player extends Entity{
 					}
 					break;
 				case "left":
-					if (keyH.leftPressed  == true&& !attackBuffer){
+					if (keyH.leftPressed  == true && !attackBuffer){
 						worldX -= speed;
 					}
 
 					break;
 				case "right":
-					if (keyH.rightPressed == true&& !attackBuffer) {
+					if (keyH.rightPressed == true && !attackBuffer) {
 						worldX += speed;
 
 					}
@@ -160,6 +198,8 @@ public class Player extends Entity{
 
 			
 		}
+
+		
 		
 		if (keyH.pPressed == true && !attack) {
 			spriteAttackNum = 1;
@@ -213,43 +253,60 @@ public class Player extends Entity{
 			switch(objectName) {
 			case "attack_boost":
 				
-				attackBoostTotal++;
+
+				attackStat++;
+				gp.playSE(1);
 				gp.obj[i] = null;
-				System.out.println("Attack Boosts: " + attackBoostTotal);
 				break;
 			case "chest":
-				if (keyTotal > 0) {
-					gp.obj[i] = null;
+				if (keyTotal > 0 && !gp.obj[i].opened) {
+					try {
+						gp.playSE(3);
+						gp.obj[i].image = ImageIO.read(getClass().getResourceAsStream("/objects/chest_2.png"));
+						
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					};
 					keyTotal--;
+					gp.obj[i].opened = true;
 				}
-				System.out.println("Keys: " + keyTotal);
+				else if (keyTotal == 0 && !gp.obj[i].opened){
+					gp.ui.showMessage("you need a key!");
+				}
 				break;
 			case "defense_boost":
 				
-				defenseBoostTotal++;
+				defenseStat++;
+				gp.playSE(1);
 				gp.obj[i] = null;
-
+				
 				break;
 			case "gold":
 				
 				goldTotal++;
+				gp.playSE(0);
 				gp.obj[i] = null;
 				break;
 			case "health_boost":
 				
-				healthBoostTotal++;
+				fullHealth ++;
+				gp.playSE(1);
 				gp.obj[i] = null;
+				
 				break;
 			case "health_potion":
 				
 				healthPotionTotal++;
+				gp.playSE(1);
 				gp.obj[i] = null;
-				System.out.println("Health Potions: " + healthPotionTotal);
 				break;
 			case "key":
 				keyTotal++;
+				gp.playSE(2);
 				gp.obj[i] = null;
-				System.out.println("Keys: " + keyTotal);
+
+				
 				break;
 			}
 			
@@ -384,8 +441,6 @@ public class Player extends Entity{
 		
 		
 		g2.drawImage(image, screenX,screenY, gp.tileSize, gp.tileSize, null);
-		g2.setColor(Color.BLACK);
-		g2.drawRect(screenX + hitBox.x, screenY+ hitBox.y, hitBox.width, hitBox.height);
 		if (attack && characterName.equals("Link") && spriteAttackNum > 0 ) {
 			int attackMoveY = 0;
 			int attackMoveX = 0;
@@ -401,7 +456,7 @@ public class Player extends Entity{
 			else if (direction.equals("up")) {
 				attackMoveY = -28;
 			}
-			g2.drawImage(weaponImage, screenX+attackMoveX, screenY+attackMoveY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(weaponImage, screenX+attackMoveX, screenY+attackMoveY, null);
 		}
 		
 		

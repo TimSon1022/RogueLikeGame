@@ -6,23 +6,21 @@ import javax.imageio.ImageIO;
 
 import main.GamePanel;
 
-public class ObjectHealthBoost extends SuperObject{
+public class ObjectHeart extends SuperObject{
 	GamePanel gp;
 	
-	public ObjectHealthBoost(GamePanel gp) {
+	public ObjectHeart(GamePanel gp) {
 		this.gp = gp;
-		name = "health_boost";
+		name = "heart";
 		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/objects/health_boost.png"));
+			image = ImageIO.read(getClass().getResourceAsStream("/objects/heart.png"));
 			uTool.scaleImage(image, gp.tileSize, gp.tileSize);
 		}
 		
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
-	
+
 }
-	

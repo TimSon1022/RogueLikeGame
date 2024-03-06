@@ -24,7 +24,9 @@ public class AssetSetter {
 		this.gp = gp;
 		this.dungeon = dungeon;
 		rooms = new ArrayList<Room>(dungeon.getRooms());
+		rooms.remove(dungeon.playerRoomIndex);
 		rooms.remove(rooms.size()-1);
+		
 		
 		
 	}
@@ -34,7 +36,7 @@ public class AssetSetter {
 
 	    for (int i = 0; i < 15; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectChest();
+	            gp.obj[i] = new ObjectChest(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -44,11 +46,12 @@ public class AssetSetter {
 	        }
 	    }
 		rooms = new ArrayList<Room>(dungeon.getRooms());
+		rooms.remove(dungeon.playerRoomIndex);
 		rooms.remove(rooms.size()-1);
 		
 	    for (int i = 15; i < 20; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectAttackBoost();
+	            gp.obj[i] = new ObjectAttackBoost(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -60,7 +63,7 @@ public class AssetSetter {
 
 	    for (int i = 20; i < 25; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectDefenseBoost();
+	            gp.obj[i] = new ObjectDefenseBoost(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -72,7 +75,7 @@ public class AssetSetter {
 
 	    for (int i = 25; i < 30; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectHealthBoost();
+	            gp.obj[i] = new ObjectHealthBoost(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -84,7 +87,7 @@ public class AssetSetter {
 
 	    for (int i = 30; i < 35; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectHealthPotion();
+	            gp.obj[i] = new ObjectHealthPotion(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -95,7 +98,7 @@ public class AssetSetter {
 	    }
 
 	    for (int i = 35; i < 55; i++) {
-	        gp.obj[i] = new ObjectGold();
+	        gp.obj[i] = new ObjectGold(gp);
 	        int roomNum = random.nextInt(rooms.size());
 
 	        // Set the object's position, ensuring it is unique
@@ -104,7 +107,7 @@ public class AssetSetter {
 
 	    for (int i = 55; i < 70; i++) {
 	        if (!rooms.isEmpty()) {
-	            gp.obj[i] = new ObjectKey();
+	            gp.obj[i] = new ObjectKey(gp);
 	            int roomNum = random.nextInt(rooms.size());
 
 	            // Set the object's position, ensuring it is unique
@@ -135,10 +138,10 @@ public class AssetSetter {
 
 	// Helper method to set the object's position
 	private void setRandomPosition(SuperObject object, Room room, Random random) {
-	    int xLength = (room.x + room.width - 1) - (room.x + 1);
-	    int yLength = (room.y + room.height - 1) - (room.y + 1);
-	    object.worldX = (random.nextInt(xLength) + (room.x + 1)) * gp.tileSize;
-	    object.worldY = (random.nextInt(yLength) + (room.y + 1)) * gp.tileSize;
+	    int xLength = (room.x + room.width - 3) - (room.x + 3);
+	    int yLength = (room.y + room.height - 3) - (room.y + 3);
+	    object.worldX = (random.nextInt(xLength) + (room.x + 3)) * gp.tileSize;
+	    object.worldY = (random.nextInt(yLength) + (room.y + 3)) * gp.tileSize;
 	}
 
 }
