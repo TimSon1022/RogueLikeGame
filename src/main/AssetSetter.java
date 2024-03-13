@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import entity.Entity;
+import entity.NPCOldMan;
 import object.ObjectAttackBoost;
 import object.ObjectChest;
 import object.ObjectDefenseBoost;
@@ -19,7 +21,7 @@ public class AssetSetter {
 	GamePanel gp;
 	DungeonGenerator dungeon;
 	List<Room> rooms;
-	
+	Random random = new Random();
 	public AssetSetter(GamePanel gp, DungeonGenerator dungeon) {
 		this.gp = gp;
 		this.dungeon = dungeon;
@@ -32,7 +34,7 @@ public class AssetSetter {
 	}
 	
 	public void setObject() {
-	    Random random = new Random();
+	    
 
 	    for (int i = 0; i < 15; i++) {
 	        if (!rooms.isEmpty()) {
@@ -143,5 +145,77 @@ public class AssetSetter {
 	    object.worldX = (random.nextInt(xLength) + (room.x + 3)) * gp.tileSize;
 	    object.worldY = (random.nextInt(yLength) + (room.y + 3)) * gp.tileSize;
 	}
+	
+	public void setNPC() {
+		List <Room> newRooms = new ArrayList<Room>(dungeon.getRooms());
+		newRooms.remove(dungeon.playerRoomIndex);
+		newRooms.remove(rooms.size()-1);
+		
+		for (int i = 0; i < newRooms.size(); i++) {
+	    	if (newRooms.get(i).width > 15 && newRooms.get(i).height > 15) {
+	    		newRooms.remove(i);
+	    	}
+		}
+		
+		gp.npc[0] = new NPCOldMan(gp);
+		int roomNum = random.nextInt(newRooms.size());
+	    setUniqueRandomPositionForEntities(gp.npc[0], gp.npc, gp.dungeon.getRooms().get(gp.dungeon.playerRoomIndex), gp.obj);
+	    
+	    
+
+		
+	}
+	
+	// Helper method to set the NPC's position, ensuring it is unique and not overlapping with objects
+    private void setUniqueRandomPositionForEntities(Entity entity, Entity[] entities, Room room, SuperObject[] objects) {
+    	
+        Random random = new Random();
+        do {
+        	setRandomPositionForEntity(entity, room, random);
+        } while (isPositionOccupiedByObjects(entity, objects) || isPositionOccupiedByOtherEntities(entity, entities));
+    }
+
+    // Helper method to check if the position is occupied by game objects
+    private boolean isPositionOccupiedByObjects(Entity entity, SuperObject[] objects) {
+        for (SuperObject object : objects) {
+            if (object != null && object.worldX == entity.worldX && object.worldY == entity.worldY) {
+                return true; // Position is occupied by objects
+            }
+        }
+        return false; // Position is not occupied
+    }
+
+    // Helper method to check if the position is occupied by other NPCs
+    private boolean isPositionOccupiedByOtherEntities(Entity entity, Entity[] entities) {
+        for (Entity otherEntity : entities) {
+            if (otherEntity != null && otherEntity != entity && otherEntity.worldX == entity.worldX && otherEntity.worldY == entity.worldY) {
+                return true; 
+            }
+        }
+        return false; // Position is not occupied
+    }
+
+    private void setRandomPositionForEntity(Entity entity, Room room, Random random) {
+        int xMin = room.x + 1;
+        int xMax = room.x + room.width - 2;
+        int yMin = room.y + 1;
+        int yMax = room.y + room.height - 2;
+
+        do {
+        	entity.worldX = (random.nextInt(xMax - xMin + 1) + xMin) * gp.tileSize;
+        	entity.worldY = (random.nextInt(yMax - yMin + 1) + yMin) * gp.tileSize;
+        } while (!isValidEntityPosition(entity, room));
+        
+        gp.dungeon.matrix[(int)entity.worldY/gp.tileSize][(int)entity.worldX/gp.tileSize] = 'N';
+        gp.dungeon.printDungeon();
+    }
+
+    private boolean isValidEntityPosition(Entity entity, Room room) {
+        int x = (int)entity.worldX / gp.tileSize;
+        int y = (int)entity.worldY / gp.tileSize;
+
+
+        return ((x == room.x+1 || x == room.x + room.width - 2) && (y == room.y+1 || y == room.y + room.height - 2));
+    }
 
 }

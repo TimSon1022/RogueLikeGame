@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -20,6 +21,7 @@ public class UI {
 	Font arial;
 	Font largeFont;
 	Font messageFont;
+	Font dialogueFont;
 	BufferedImage keyImage;
 	BufferedImage healthPotionImage;
 	BufferedImage attackImage;
@@ -37,6 +39,7 @@ public class UI {
 	boolean messageOn = false;
 	double playTime = 0;
 	DecimalFormat dFormat = new DecimalFormat("00");
+	public String currentDialogue = "";
 	
 	
 	public UI(GamePanel gp) {
@@ -44,6 +47,7 @@ public class UI {
 		arial = new Font("Arial", Font.PLAIN, 10);
 		largeFont = new Font("Arial", Font.PLAIN, 80);
 		messageFont = new Font("Arial", Font.PLAIN, 15);
+		dialogueFont = new Font("Arial", Font.PLAIN, 30);
 		key = new ObjectKey(gp);
 		healthPotion = new ObjectHealthPotion(gp);
 		attack = new ObjectAttackBoost(gp);
@@ -71,57 +75,93 @@ public class UI {
 		g2.setFont(arial);
 		g2.setColor(Color.WHITE);
 		if (gp.gameState == gp.playState) {
-			g2.drawImage(heartImage, gp.originalTileSize/2, 5, gp.tileSize, gp.tileSize, null);
-			g2.drawString(gp.player.combatHealth + " / "  + gp.player.fullHealth, 39 , 25);
-			g2.drawImage(attackImage, gp.tileSize/2, gp.tileSize/2 + 25, gp.originalTileSize, gp.originalTileSize, null);
-			g2.drawString("  "  + gp.player.attackStat, 33 , 50);
-			g2.drawImage(defenseImage, gp.tileSize/2, gp.tileSize/2  + 50, gp.originalTileSize, gp.originalTileSize, null);
-			g2.drawString("  "  + gp.player.defenseStat, 33 , 75);	
+			
 			gold.update();
 			gold.spriteNum++;
 			if (gold.spriteNum > 41) {
 				gold.spriteNum = 1;
 			}
-			goldImage = gold.image;
-			
-			g2.drawImage(goldImage, gp.tileSize/2, gp.tileSize/2 + 75, gp.originalTileSize, gp.originalTileSize, null);
-			g2.drawString("x "  + gp.player.goldTotal, 33 , 100);	
-			g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2 + 100, gp.originalTileSize, gp.originalTileSize, null);
-			g2.drawString("x "  + gp.player.keyTotal, 33 , 125);
-			g2.drawImage(healthPotionImage, gp.tileSize/2, gp.tileSize/2 + 125, gp.originalTileSize, gp.originalTileSize, null);
-			g2.drawString("x "  + gp.player.healthPotionTotal, 33 , 150);
-			
-
-			
+			goldImage = gold.image;	
 			//Time
 			playTime += (double)1/100;
-			int hours = (int) (playTime / 3600);
-	        int minutes = (int) ((playTime % 3600) / 60);
-	        int remainingSeconds = (int) (playTime % 60);
-	        String formattedHours = dFormat.format(hours);
-	        String formattedMinutes = dFormat.format(minutes);
-	        String formattedSeconds = dFormat.format(remainingSeconds);
-			g2.drawString("Time: " + formattedHours + ":" + formattedMinutes + ":" + formattedSeconds, gp.tileSize*29 + 25, 25);
-			//message
+
+	        			//message
 			if (messageOn == true) {
 				g2.setFont(g2.getFont().deriveFont(15F));
 				g2.drawString(message, 16 ,175);
 				messageOn = false;
+				g2.setFont(arial);
 				
 			}
 		
+		}
+		
+		if (gp.gameState == gp.playState) {
+			
 		}
 		
 		if (gp.gameState == gp.pauseState) {
 			drawPauseScreen();
 		}
 		
-
+		if (gp.gameState == gp.dialogueState) {
+			drawDialogueScreen();
+		}
 		
-
-
+		g2.drawImage(heartImage, gp.originalTileSize/2, 5, gp.tileSize, gp.tileSize, null);
+		g2.drawString(gp.player.combatHealth + " / "  + gp.player.fullHealth, 39 , 25);
+		g2.drawImage(attackImage, gp.tileSize/2, gp.tileSize/2 + 25, gp.originalTileSize, gp.originalTileSize, null);
+		g2.drawString("  "  + gp.player.attackStat, 33 , 50);
+		g2.drawImage(defenseImage, gp.tileSize/2, gp.tileSize/2  + 50, gp.originalTileSize, gp.originalTileSize, null);
+		g2.drawString("  "  + gp.player.defenseStat, 33 , 75);	
+		g2.drawImage(goldImage, gp.tileSize/2, gp.tileSize/2 + 75, gp.originalTileSize, gp.originalTileSize, null);
+		g2.drawString("x "  + gp.player.goldTotal, 33 , 100);	
+		g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2 + 100, gp.originalTileSize, gp.originalTileSize, null);
+		g2.drawString("x "  + gp.player.keyTotal, 33 , 125);
+		g2.drawImage(healthPotionImage, gp.tileSize/2, gp.tileSize/2 + 125, gp.originalTileSize, gp.originalTileSize, null);
+		g2.drawString("x "  + gp.player.healthPotionTotal, 33 , 150);
+		int hours = (int) (playTime / 3600);
+        int minutes = (int) ((playTime % 3600) / 60);
+        int remainingSeconds = (int) (playTime % 60);
+		String formattedHours = dFormat.format(hours);
+        String formattedMinutes = dFormat.format(minutes);
+        String formattedSeconds = dFormat.format(remainingSeconds);
+		g2.drawString("Time: " + formattedHours + ":" + formattedMinutes + ":" + formattedSeconds, gp.tileSize*29 + 25, 25);
 	}
 	
+	private void drawDialogueScreen() {
+		
+		//Window
+		int x = gp.tileSize * 2;
+		int y = gp.tileSize * 15;
+		int width  = gp.screenWidth - (gp.tileSize * 4);
+		int height = gp.tileSize * 7;
+		
+		drawDialogueWindow(x,y,width,height);
+		g2.setFont(dialogueFont);
+		x+= gp.tileSize;
+		y += gp.tileSize;
+		for (String line : currentDialogue.split("\n")) {
+			g2.drawString(line, x, y);
+			y+= 40;
+		}
+		
+		
+		g2.setFont(arial);
+		
+	}
+	
+	public void drawDialogueWindow(int x, int y, int width, int height) {
+		Color c = new Color(0 , 0, 0,200);
+		g2.setColor(c);
+		g2.fillRoundRect(x, y, width, height, 35, 35);
+		
+		c = new Color(255,255,255);
+		g2.setColor(c);
+		g2.setStroke(new BasicStroke(5));
+		g2.drawRoundRect(x + 20, y + 5, width-10, height-10, 25,25 );
+	}
+
 	public void drawPauseScreen() {
 		String text = "PAUSED";
 		g2.setFont(largeFont);

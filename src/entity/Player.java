@@ -1,6 +1,5 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -10,12 +9,12 @@ import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.UtilityTool;
+
 
 
 public class Player extends Entity{
 	
-	GamePanel gp;
+
 	KeyHandler keyH;
 	public final int screenX;
 	public final int screenY;
@@ -35,7 +34,9 @@ public class Player extends Entity{
 	
 	
 	public Player(GamePanel gp, KeyHandler keyH) {
-		this.gp = gp;
+		
+		super(gp);
+
 		this.keyH = keyH;
 		screenX = gp.screenWidth/2 - (gp.tileSize/2);
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
@@ -54,76 +55,62 @@ public class Player extends Entity{
 	}
 	
 	public void setDefaultValues() {		
-		speed = 2;
+		speed = 2.5;
 		direction = "down";
 	}
 	
 	public void getPlayerImage() {
 		characterName = "Link";
 		 if (characterName.equals("Link")) {
-		        up1 = setup("link_up_1");
-		        up2 = setup("link_up_2");
-		        down1 = setup("link_down_1");
-		        down2 = setup("link_down_2");
-		        left1 = setup("link_left_1");
-		        left2 = setup("link_left_2");
-		        right1 = setup("link_right_1");
-		        right2 = setup("link_right_2");
-		        downAttack = setup("link_attack_down");
-		        downSwordAttack1 = setup("link_sword_attack_down_1");
-		        downSwordAttack2 = setup("link_sword_attack_down_2");
-		        downSwordAttack3 = setup("link_sword_attack_down_3");
-		        leftAttack = setup("link_attack_left");
-		        leftSwordAttack1 = setup("link_sword_attack_left_1");
-		        leftSwordAttack2 = setup("link_sword_attack_left_2");
-		        leftSwordAttack3 = setup("link_sword_attack_left_3");
-		        rightAttack = setup("link_attack_right");
-		        rightSwordAttack1 = setup("link_sword_attack_right_1");
-		        rightSwordAttack2 = setup("link_sword_attack_right_2");
-		        rightSwordAttack3 = setup("link_sword_attack_right_3");
-		        upAttack = setup("link_attack_up");
-		        upSwordAttack1 = setup("link_sword_attack_up_1");
-		        upSwordAttack2 = setup("link_sword_attack_up_2");
-		        upSwordAttack3 = setup("link_sword_attack_up_3");
+		        up1 = setup("/player/link_up_1");
+		        up2 = setup("/player/link_up_2");
+		        down1 = setup("/player/link_down_1");
+		        down2 = setup("/player/link_down_2");
+		        left1 = setup("/player/link_left_1");
+		        left2 = setup("/player/link_left_2");
+		        right1 = setup("/player/link_right_1");
+		        right2 = setup("/player/link_right_2");
+		        downAttack = setup("/player/link_attack_down");
+		        downSwordAttack1 = setup("/player/link_sword_attack_down_1");
+		        downSwordAttack2 = setup("/player/link_sword_attack_down_2");
+		        downSwordAttack3 = setup("/player/link_sword_attack_down_3");
+		        leftAttack = setup("/player/link_attack_left");
+		        leftSwordAttack1 = setup("/player/link_sword_attack_left_1");
+		        leftSwordAttack2 = setup("/player/link_sword_attack_left_2");
+		        leftSwordAttack3 = setup("/player/link_sword_attack_left_3");
+		        rightAttack = setup("/player/link_attack_right");
+		        rightSwordAttack1 = setup("/player/link_sword_attack_right_1");
+		        rightSwordAttack2 = setup("/player/link_sword_attack_right_2");
+		        rightSwordAttack3 = setup("/player/link_sword_attack_right_3");
+		        upAttack = setup("/player/link_attack_up");
+		        upSwordAttack1 = setup("/player/link_sword_attack_up_1");
+		        upSwordAttack2 = setup("/player/link_sword_attack_up_2");
+		        upSwordAttack3 = setup("/player/link_sword_attack_up_3");
 		    } 
 		 else if (characterName.equals("Mario")) {
-		        up1 = setup("mario_up_1");
-		        up2 = setup("mario_up_2");
-		        down1 = setup("mario_down_1");
-		        down2 = setup("mario_down_2");
-		        left1 = setup("mario_left_1");
-		        left2 = setup("mario_left_2");
-		        right1 = setup("mario_right_1");
-		        right2 = setup("mario_right_2");
+		        up1 = setup("/player/mario_up_1");
+		        up2 = setup("/player/mario_up_2");
+		        down1 = setup("/player/mario_down_1");
+		        down2 = setup("/player/mario_down_2");
+		        left1 = setup("/player/mario_left_1");
+		        left2 = setup("/player/mario_left_2");
+		        right1 = setup("/player/mario_right_1");
+		        right2 = setup("/player/mario_right_2");
 		    } 
 		 else if (characterName.equals("Pokemon Trainer")) {
-		        up1 = setup("pkmn_trainer_up_1");
-		        up2 = setup("pkmn_trainer_up_2");
-		        down1 = setup("pkmn_trainer_down_1");
-		        down2 = setup("pkmn_trainer_down_2");
-		        left1 = setup("pkmn_trainer_left_1");
-		        left2 = setup("pkmn_trainer_left_2");
-		        right1 = setup("pkmn_trainer_right_1");
-		        right2 = setup("pkmn_trainer_right_2");
+		        up1 = setup("/player/pkmn_trainer_up_1");
+		        up2 = setup("/player/pkmn_trainer_up_2");
+		        down1 = setup("/player/pkmn_trainer_down_1");
+		        down2 = setup("/player/pkmn_trainer_down_2");
+		        left1 = setup("/player/pkmn_trainer_left_1");
+		        left2 = setup("/player/pkmn_trainer_left_2");
+		        right1 = setup("/player/pkmn_trainer_right_1");
+		        right2 = setup("/player/pkmn_trainer_right_2");
 		    }
 		
 	}
 	
-	public BufferedImage setup(String imageName) {
-		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = null;
-		
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-		
-		return image;
-		
-	}
+
 	
 	public void update() {
 		if (combatHealth < fullHealth) {
@@ -163,6 +150,12 @@ public class Player extends Entity{
 		
 		int objIndex = gp.cChecker.checkObject(this, true);
 		pickUpObject(objIndex);
+		
+		//Check NPC collision
+		int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+		
+		interactWithNPC(npcIndex);
+		
 		if (!collisionOn) {
 
 				switch(direction) {
@@ -246,6 +239,20 @@ public class Player extends Entity{
 	}
 	
 	
+	private void interactWithNPC(int i) {
+		if (i != 999) {
+			if (keyH.enterPressed == true) {
+					gp.npc[i].speak();
+					gp.gameState = gp.dialogueState;
+					
+
+				
+			}
+			
+		}
+		
+	}
+
 	public void pickUpObject(int i) {
 		if (i != 999) {
 			
@@ -298,7 +305,7 @@ public class Player extends Entity{
 			case "health_potion":
 				
 				healthPotionTotal++;
-				gp.playSE(1);
+				gp.playSE(4);
 				gp.obj[i] = null;
 				break;
 			case "key":

@@ -73,7 +73,7 @@ public class DungeonGenerator {
 	
 
 
-    private static final int MAX_ROOMS = 100;
+    private static final int MAX_ROOMS = 150;
     private static final int MIN_ROOM_SIZE = 10;
     private static final int MAX_ROOM_SIZE = 25;
     private static final int DUNGEONMAP_WIDTH = 150;
@@ -93,7 +93,7 @@ public class DungeonGenerator {
         generateRooms();
         placePlayer();
         placeFinalBoss();
-        printDungeon();
+//        printDungeon();
        
     }
 
@@ -146,7 +146,8 @@ public class DungeonGenerator {
                             	matrix[roomY][roomX] = ' ';
                             
                         }
-                        }
+                       
+                    }
                     
                     rooms.remove(i);
                     }
@@ -182,7 +183,12 @@ public class DungeonGenerator {
         for (Room room : rooms) {
             for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
                 for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
-                    	matrix[y][x] = '.';
+
+                		matrix[y][x] = '.';
+
+                		
+
+                    	
                 }
             }
         }
@@ -473,14 +479,8 @@ public class DungeonGenerator {
 
         return -1; // No room found at the specified coordinates
     }
-    
 
-    
-
-    
-
-
-    private void printDungeon() {
+    public void printDungeon() {
         for (int j = 0; j < DUNGEONMAP_HEIGHT; j++) {
             for (int i = 0; i < DUNGEONMAP_WIDTH; i++) {
                 System.out.print(matrix[j][i] + " ");

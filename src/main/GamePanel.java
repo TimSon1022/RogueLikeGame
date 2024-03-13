@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -45,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
 	// Entities and objects
 	public Player player = new Player(this, keyH);
 	public SuperObject obj[] = new SuperObject[150];
+	public Entity npc[] = new Entity[10];
 	
 
 	
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public int gameState;
 	public final int pauseState = 0;
 	public final int playState = 1;
+	public final int dialogueState = 2;
 	
 	
 	public GamePanel() {
@@ -67,6 +70,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void setupGame() {
 		aSetter.setObject();
+		aSetter.setNPC();
 		gameState = playState;
 	}
 	
@@ -109,11 +113,21 @@ public class GamePanel extends JPanel implements Runnable{
 	public void update() {
 		
 		if (gameState == playState) {
+			//Player
 			player.update();
+			
+			//Object
 			for (int i = 0; i < obj.length; i++) {
 				if (obj[i] != null) {
 					obj[i].update();
 					obj[i].spriteNum++;
+				}
+			}
+			
+			//NPC
+			for (int i = 0; i < npc.length; i++) {
+				if (npc[i] != null) {
+					npc[i].update();
 				}
 			}
 		}
@@ -138,6 +152,18 @@ public class GamePanel extends JPanel implements Runnable{
 			if (obj[i] != null) {
 				try {
 					obj[i].draw(g2, this);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//NPC
+		for (int i = 0; i < npc.length; i++) {
+			if (npc[i] != null) {
+				try {
+					npc[i].draw(g2);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
