@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -29,6 +30,7 @@ public class Player extends Entity{
 	public double xp = 0;
 	public int attackStat = 5;
 	public int defenseStat = 5;
+	public int playerLevel = 1;
 
 
 	
@@ -42,7 +44,7 @@ public class Player extends Entity{
 		screenY = gp.screenHeight/2 - (gp.tileSize/2);
 		hitBox = new Rectangle();
 		hitBox.x = 4;
-		hitBox.y = 4;
+		hitBox.y = 8;
 		hitBoxDefaultX = hitBox.x;
 		hitBoxDefaultY = hitBox.y;
 		hitBox.width = 24;
@@ -55,7 +57,7 @@ public class Player extends Entity{
 	}
 	
 	public void setDefaultValues() {		
-		speed = 2.5;
+		speed = 2;
 		direction = "down";
 	}
 	
@@ -262,55 +264,61 @@ public class Player extends Entity{
 				
 
 				attackStat++;
-				gp.playSE(1);
+				gp.playSE(1, -10.0f);
 				gp.obj[i] = null;
 				break;
 			case "chest":
 				if (keyTotal > 0 && !gp.obj[i].opened) {
 					try {
-						gp.playSE(3);
+						gp.playSE(3, -10.0f);
 						gp.obj[i].image = ImageIO.read(getClass().getResourceAsStream("/objects/chest_2.png"));
 						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					};
+					gp.ui.showMessage("Leveled up!", true);
 					keyTotal--;
 					gp.obj[i].opened = true;
+					
+					playerLevel++;
+					attackStat++;
+					defenseStat++;
+					fullHealth++;
 				}
 				else if (keyTotal == 0 && !gp.obj[i].opened){
-					gp.ui.showMessage("you need a key!");
+					gp.ui.showMessage("you need a key!", false);
 				}
 				break;
 			case "defense_boost":
 				
 				defenseStat++;
-				gp.playSE(1);
+				gp.playSE(1 , -10.0f);
 				gp.obj[i] = null;
 				
 				break;
 			case "gold":
 				
 				goldTotal++;
-				gp.playSE(0);
+				gp.playSE(0, -10.0f);
 				gp.obj[i] = null;
 				break;
 			case "health_boost":
 				
 				fullHealth ++;
-				gp.playSE(1);
+				gp.playSE(1, -10.0f);
 				gp.obj[i] = null;
 				
 				break;
 			case "health_potion":
 				
 				healthPotionTotal++;
-				gp.playSE(4);
+				gp.playSE(4, -10.0f);
 				gp.obj[i] = null;
 				break;
 			case "key":
 				keyTotal++;
-				gp.playSE(2);
+				gp.playSE(2, -10.0f);
 				gp.obj[i] = null;
 
 				
@@ -333,7 +341,6 @@ public class Player extends Entity{
 		BufferedImage image = null;
 		BufferedImage weaponImage = null;
 
-		
 		switch(direction) {
 		case "up":
 			if (spriteNum == 1) {
@@ -466,6 +473,9 @@ public class Player extends Entity{
 			g2.drawImage(weaponImage, screenX+attackMoveX, screenY+attackMoveY, null);
 		}
 		
+		
+		g2.setColor(Color.BLACK);
+		g2.drawRect(screenX + hitBox.x, screenY + hitBox.y, hitBox.width, hitBox.height);
 		
 		
 		

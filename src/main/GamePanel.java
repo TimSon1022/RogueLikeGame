@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+
 import javax.swing.JPanel;
 
 import entity.Entity;
@@ -52,9 +53,13 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//Game State
 	public int gameState;
-	public final int pauseState = 0;
-	public final int playState = 1;
-	public final int dialogueState = 2;
+	public final int titleScreen = 0;
+	public final int pauseState = 1;
+	public final int playState = 2;
+	public final int dialogueState = 3;
+	
+	boolean fade = true;
+	
 	
 	
 	public GamePanel() {
@@ -71,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public void setupGame() {
 		aSetter.setObject();
 		aSetter.setNPC();
-		gameState = playState;
+		gameState = titleScreen;
 	}
 	
 	public void startGameThread() {
@@ -112,7 +117,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		
-		if (gameState == playState) {
+		if (gameState == playState || gameState == dialogueState) {
 			//Player
 			player.update();
 			
@@ -144,42 +149,68 @@ public class GamePanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D)g;
 		
-		//tile
-		tileM.draw(g2);
 		
-		//object
-		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] != null) {
-				try {
-					obj[i].draw(g2, this);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		
+		
+		
+		if (gameState == titleScreen) {
+			ui.draw(g2);
 		}
 		
-		//NPC
-		for (int i = 0; i < npc.length; i++) {
-			if (npc[i] != null) {
-				try {
-					npc[i].draw(g2);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		else {
+			
+			if (fade == true) {
+
+				 for (int opacity = 255; opacity >= 0; opacity -= 10) {
+					 	
+		                g2.setColor(new Color(0, 0, 0, opacity)); // Set color with decreasing alpha
+		                g2.fillRect(0, 0, screenWidth, screenHeight); // Draw semi-transparent rectangle
+		                
+		            }
+				 fade = false;
+			}
+			
+																											
+			//tile
+			tileM.draw(g2);
+			
+			//object
+			for (int i = 0; i < obj.length; i++) {
+				if (obj[i] != null) {
+					try {
+						obj[i].draw(g2, this);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
+			
+			//NPC
+			for (int i = 0; i < npc.length; i++) {
+				if (npc[i] != null) {
+					try {
+						npc[i].draw(g2);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			//player
+			player.draw(g2);
+			ui.draw(g2);
+			
+			
 		}
-		
-		//player
-		player.draw(g2);
-		ui.draw(g2);
 		
 		g2.dispose();
 	}
 	
-	public void playSE (int i) {
+	public void playSE (int i, float fc) {
 		soundEffect.setFile(i);
+		soundEffect.setVolume(fc);
 		soundEffect.play();
 	}
 	

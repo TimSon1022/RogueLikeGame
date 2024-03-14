@@ -7,6 +7,8 @@ public class KeyHandler implements KeyListener{
 	
 	public boolean upPressed, downPressed, leftPressed, rightPressed, pPressed, enterPressed;
 	GamePanel gp;
+	
+	public String inputString = ""; // String to store user input
 
 	public KeyHandler (GamePanel gp) {
 		this.gp = gp;
@@ -22,9 +24,81 @@ public class KeyHandler implements KeyListener{
 		
 		int code = e.getKeyCode();
 		
+        if (gp.gameState == gp.titleScreen) {
+
+            if (code == KeyEvent.VK_W) {
+                upPressed = true;
+            } 
+            if (code == KeyEvent.VK_S) {
+                downPressed = true;
+            }
+            
+        	if (gp.ui.titleScreenState == 0) {
+        		if (code == KeyEvent.VK_ENTER) {
+                	
+                	
+                	if (gp.ui.commandNum == 0) {
+                		code = 0;
+                		gp.playSE(8, -10.0f);
+                		gp.ui.titleScreenState = 1;
+                		
+                	}
+                	if (gp.ui.commandNum == 1) {
+                		
+                	}
+                	
+                	if (gp.ui.commandNum == 2) {
+                		
+                	}
+                	
+                	if (gp.ui.commandNum == 3) {
+                		System.exit(0);
+                	}
+        		}
+        	}
+            
+            if (gp.ui.titleScreenState == 1) {
+                if (inputString.length() < 30 && (Character.isLetter(e.getKeyChar()) 
+                		|| Character.isDigit(e.getKeyChar())
+                		|| Character.isWhitespace(e.getKeyChar()))) {
+                    inputString += e.getKeyChar();
+                    
+                }
+                // Handle backspace to delete the last character from inputString
+                else if (code == KeyEvent.VK_BACK_SPACE && inputString.length() > 0) {
+                    inputString = inputString.substring(0, inputString.length() - 1);
+                }
+                gp.ui.inputGameName = inputString;
+                if (code == KeyEvent.VK_ENTER) { 
+                	
+                	if (inputString.isBlank()) {
+                		gp.ui.inputIsEmpty = true;
+                	}
+                	else {
+                		gp.playSE(8, -10.0f);
+                		gp.gameState = gp.playState;
+                	}
+                	
+                }
+                else if (code == KeyEvent.VK_ESCAPE) {
+                	gp.playSE(9, -10.0f);
+                	gp.ui.titleScreenState = 0;
+                }
+                else {
+                		gp.ui.inputIsEmpty = false;
+                }
+
+            	
+            	
+
+            }
+            
+
+        }
+		
 		
 		//Play state
-		if (gp.gameState == gp.playState) {
+        else if (gp.gameState == gp.playState) {
 			if (code == KeyEvent.VK_W) {
 				upPressed = true;
 			}
@@ -43,6 +117,7 @@ public class KeyHandler implements KeyListener{
 
 
 			if (code == KeyEvent.VK_SPACE) {
+				gp.playSE(6, -10.0f);
 				gp.gameState = gp.pauseState;
 			}
 			
@@ -62,6 +137,7 @@ public class KeyHandler implements KeyListener{
 			if (code == KeyEvent.VK_SPACE) {
 
 				gp.gameState = gp.playState;
+				gp.playSE(7, -10.0f);
 			}
 			
 		}
@@ -101,7 +177,6 @@ public class KeyHandler implements KeyListener{
         }
         
         if (code == KeyEvent.VK_ENTER) {
-            // Set pReleased to true when the "P" key is released
             enterPressed = false;
         }
 

@@ -18,12 +18,13 @@ public class TileManager {
     DungeonGenerator dungeon;
     public char[][] dungeonTiles;
     public Tile[][] dungeonMap;
+    
     List<Room> rooms;
     public int playerX;
     public int playerY;
-    Tile[] tile;
 
     UtilityTool uTool;
+    
 
 
     public TileManager(GamePanel gp) {
@@ -31,7 +32,8 @@ public class TileManager {
         this.dungeon = gp.dungeon;
         uTool = new UtilityTool();        
         rooms = new ArrayList<>(dungeon.getRooms());
-        tile = new Tile[10];
+
+        
 		dungeonTiles = gp.dungeon.matrix;
 		dungeonMap = new Tile[dungeonTiles.length][dungeonTiles[0].length];
 		generateDungeons();
@@ -81,6 +83,8 @@ public class TileManager {
     	}
     	
     }
+    
+
 
 
     public void draw(Graphics2D g2){
@@ -90,15 +94,16 @@ public class TileManager {
 
     	
     	while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
-    	    int index = dungeon.getRoomIndexAt((int)gp.player.worldX/gp.tileSize, (int)gp.player.worldY/gp.tileSize);
+    	    int index = dungeon.getRoomIndexAt(gp.player.worldX/gp.tileSize, gp.player.worldY/gp.tileSize);
     	    int worldX = worldCol * gp.tileSize;
     	    int worldY = worldRow * gp.tileSize;
-    	    int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
-    	    int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
+    	    int screenX = worldX - gp.player.worldX + gp.player.screenX;
+    	    int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-    	    if ((index != -1 && isWithinBounds(worldCol, worldRow, worldX, worldY, (int)gp.player.worldX, (int)gp.player.worldY, gp.player.screenX, gp.player.screenY, rooms.get(index))) || 
-    	        (index == -1 && isWithinBounds(worldCol, worldRow, worldX, worldY, (int)gp.player.worldX, (int)gp.player.worldY, gp.player.screenX - 480, gp.player.screenY - 355, null))) {
+    	    if ((index != -1 && isWithinBounds(worldCol, worldRow, worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX, gp.player.screenY, rooms.get(index))) || 
+    	        (index == -1 && isWithinBounds(worldCol, worldRow, worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX - 480, gp.player.screenY - 355, null))) {
     	        g2.drawImage(dungeonMap[worldRow][worldCol].image, screenX, screenY, null);
+
     	    }
 
 

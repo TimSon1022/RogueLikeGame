@@ -93,7 +93,7 @@ public class DungeonGenerator {
         generateRooms();
         placePlayer();
         placeFinalBoss();
-//        printDungeon();
+//      printDungeon();
        
     }
 
@@ -184,9 +184,9 @@ public class DungeonGenerator {
             for (int x = room.x + 1; x < room.x + room.width - 1; x++) {
                 for (int y = room.y + 1; y < room.y + room.height - 1; y++) {
 
-                		matrix[y][x] = '.';
+                	    matrix[y][x] = '.';
 
-                		
+
 
                     	
                 }
@@ -305,7 +305,7 @@ public class DungeonGenerator {
     else {
         for (int y = minY; y <= maxY; y++) {
             if (minX >= 0 && minX < DUNGEONMAP_WIDTH) {
-
+            			
                 		matrix[y][minX] = '#';
             }
         }
@@ -488,6 +488,8 @@ public class DungeonGenerator {
             System.out.println();
         }
     }
+    
+    
     
     
     

@@ -25,11 +25,11 @@ public class SuperObject {
 	UtilityTool uTool = new UtilityTool();
 	
 	public void draw(Graphics2D g2, GamePanel gp) throws InterruptedException {
-		int index = gp.dungeon.getRoomIndexAt((int)gp.player.worldX/gp.tileSize, (int)gp.player.worldY/gp.tileSize);
-	    int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
-	    int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
+		int index = gp.dungeon.getRoomIndexAt(gp.player.worldX/gp.tileSize, gp.player.worldY/gp.tileSize);
+	    int screenX = worldX - gp.player.worldX + gp.player.screenX;
+	    int screenY = worldY - gp.player.worldY + gp.player.screenY;
 	    
-	    if (index != -1 && isWithinBounds(worldX, worldY, (int)gp.player.worldX, (int)gp.player.worldY, gp.player.screenX, gp.player.screenY, gp.dungeon.getRooms().get(index), gp)) {
+	    if (index != -1 && isWithinBounds(worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX, gp.player.screenY, gp.dungeon.getRooms().get(index), gp)) {
 	        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
 	        if (name.equals("gold") && spriteNum > 41) {

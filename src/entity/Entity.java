@@ -13,8 +13,8 @@ import main.UtilityTool;
 
 public class Entity {
 	
-	public double worldX, worldY;
-	public double speed;
+	public int worldX, worldY;
+	public int speed;
 	
 	GamePanel gp;
 	public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, 
@@ -30,7 +30,7 @@ public class Entity {
 	public String characterName; 
 	boolean attack;
 	boolean attackBuffer;
-	public Rectangle hitBox = new Rectangle (4,4, 24,24);
+	public Rectangle hitBox = new Rectangle (0,0, 32,32);
 	public int hitBoxDefaultX, hitBoxDefaultY;
 	
 	public boolean collisionOn = false;
@@ -92,13 +92,15 @@ public class Entity {
 		
 		
 		if (!collisionOn) {
-			
-			switch(direction) {
-			case "up": worldY -= speed; break;
-			case "down": worldY += speed; break;
-			case "left": worldX -= speed; break;
-			case "right": worldX += speed; break;
+			if (gp.gameState == gp.playState) {
+				switch(direction) {
+				case "up": worldY -= speed; break;
+				case "down": worldY += speed; break;
+				case "left": worldX -= speed; break;
+				case "right": worldX += speed; break;
+				}
 			}
+
 		
 	}
 		
@@ -121,12 +123,12 @@ public class Entity {
 		BufferedImage image = null;
 		
 
-		int index = gp.dungeon.getRoomIndexAt((int)gp.player.worldX/gp.tileSize, (int)gp.player.worldY/gp.tileSize);
+		int index = gp.dungeon.getRoomIndexAt(gp.player.worldX/gp.tileSize, gp.player.worldY/gp.tileSize);
 	    int screenX = (int) (worldX - gp.player.worldX + gp.player.screenX);
 	    int screenY = (int) (worldY - gp.player.worldY + gp.player.screenY);
 	    
-	    if ((index != -1 && isWithinBounds((int)worldX, (int)worldY, (int)gp.player.worldX, (int)gp.player.worldY, gp.player.screenX, gp.player.screenY, gp.dungeon.getRooms().get(index), gp))
-	    		|| (index == -1 && isWithinBounds((int)worldX, (int)worldY, (int)gp.player.worldX, (int)gp.player.worldY, gp.player.screenX - 500, gp.player.screenY - 355, null, gp))) {
+	    if ((index != -1 && isWithinBounds(worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX, gp.player.screenY, gp.dungeon.getRooms().get(index), gp))
+	    		|| (index == -1 && isWithinBounds(worldX, worldY, gp.player.worldX, gp.player.worldY, gp.player.screenX - 500, gp.player.screenY - 355, null, gp))) {
 	        
 			switch(direction) {
 			case "up":

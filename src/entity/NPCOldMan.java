@@ -13,7 +13,7 @@ public class NPCOldMan extends Entity{
 	public NPCOldMan(GamePanel gp) {
 		super(gp);
 		direction = "down";
-		speed = 0.5;
+		speed = 1;
 		getImage();
 		setDialogue();
 	}
@@ -31,32 +31,37 @@ public class NPCOldMan extends Entity{
 	}
 	
 	public void setDialogue() {
-		dialogues[0] = "What would you like to buy?";
+		dialogues[0] = "What would you like to buy?\nHealth Potion\nAttack Boost\nDefense Boost\nHealth Boost";
 	}
+
 	
 	public void setAction() {
-		actionLockCounter++;
 		
-		if (actionLockCounter == 200) {
-			Random random = new Random();
+		if (gp.gameState == gp.playState) {
+			actionLockCounter++;
 			
-			int i = random.nextInt(100) + 1;
-			
-			if (i <= 25) {
-				direction = "up";
+			if (actionLockCounter == 200) {
+				Random random = new Random();
+				
+				int i = random.nextInt(100) + 1;
+				
+				if (i <= 25) {
+					direction = "up";
+				}
+				if (i > 25 && i <= 50) {
+					direction = "down";
+				}
+				if (i > 50 && i <= 75){
+					direction = "left";
+				}
+				if (i > 75 && i <= 100) {
+					direction = "right";
+				}
+				
+				actionLockCounter = 0;
 			}
-			if (i > 25 && i <= 50) {
-				direction = "down";
-			}
-			if (i > 50 && i <= 75){
-				direction = "left";
-			}
-			if (i > 75 && i <= 100) {
-				direction = "right";
-			}
-			
-			actionLockCounter = 0;
 		}
+
 		
 		
 		

@@ -159,7 +159,7 @@ public class AssetSetter {
 		
 		gp.npc[0] = new NPCOldMan(gp);
 		int roomNum = random.nextInt(newRooms.size());
-	    setUniqueRandomPositionForEntities(gp.npc[0], gp.npc, gp.dungeon.getRooms().get(gp.dungeon.playerRoomIndex), gp.obj);
+	    setUniqueRandomPositionForEntities(gp.npc[0], gp.npc, newRooms.get(roomNum), gp.obj);
 	    
 	    
 
@@ -215,7 +215,7 @@ public class AssetSetter {
         int y = (int)entity.worldY / gp.tileSize;
 
 
-        return ((x == room.x+1 || x == room.x + room.width - 2) && (y == room.y+1 || y == room.y + room.height - 2));
+        return ((x == room.x + 1 || x == room.x + room.width - 2) && (room.x + 1 <= x && x < room.x + room.width - 1) || ((y == room.y + 1 || y == room.y + room.height - 2) && (room.y + 1 <= y && y < room.y + room.height - 1)));
     }
 
 }
